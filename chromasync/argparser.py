@@ -34,9 +34,9 @@ def add_load_subcommand(subparser):
 
     parser.add_argument(
         "palette",
-        help=f"sources a palette either from '{PALETTES_DIR}' (file" + \
-             f"extension can be omitted) or from a  file anywhere in" + \
-             f"the file system (as long as it's readable)"
+        help=f"loads a palette either from the filesystem (by specifying " + \
+             f"a path) or from '{PALETTES_DIR}'. In the latter case, " + \
+             f"file extension might be omitted"
     )
 
     parser.add_argument(
