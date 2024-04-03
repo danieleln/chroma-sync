@@ -67,6 +67,21 @@ def add_list_subcommand(subparser):
     )
 
 
+    ld_group = parser.add_mutually_exclusive_group(required=False)
+
+    ld_group.add_argument(
+        "-d", "--dark",
+        action="store_true",
+        help="lists dark palettes only"
+    )
+
+    ld_group.add_argument(
+        "-l", "--light",
+        action="store_true",
+        help="lists light palettes only"
+    )
+
+
 
 
 # Global verbosity options
