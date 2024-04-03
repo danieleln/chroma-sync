@@ -21,7 +21,7 @@ def run(args: argparse.Namespace) -> None:
 
 
 def ls_dir(path: Path, remove_suffix: bool=False) -> None:
-    files = {f for f in path.iterdir() if f.is_file()}
+    files = sorted({f for f in path.iterdir() if f.is_file()})
 
     if remove_suffix is True:
         names = map(lambda f: f.stem, files)
