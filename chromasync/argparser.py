@@ -16,11 +16,11 @@ def build_arg_parser():
     subp = parser.add_subparsers(
         dest="action",
         required=True,
-        help="available sub-commands"
+        help="available commands"
     )
 
-    add_load_subcommand(subp)
-    add_list_subcommand(subp)
+    add_load_command(subp)
+    add_list_command(subp)
 
 
     return parser
@@ -29,7 +29,7 @@ def build_arg_parser():
 
 
 # Load sub command options
-def add_load_subcommand(subparser):
+def add_load_command(subparser):
     parser = subparser.add_parser("load", help="loads a new theme")
 
     parser.add_argument(
@@ -49,7 +49,7 @@ def add_load_subcommand(subparser):
 
 
 # List sub command options
-def add_list_subcommand(subparser):
+def add_list_command(subparser):
     parser = subparser.add_parser("list", help="lists available palettes/templates")
 
     group = parser.add_mutually_exclusive_group(required=True)

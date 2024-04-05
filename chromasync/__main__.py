@@ -1,6 +1,6 @@
 from .argparser import build_arg_parser
 from .config import build_environment
-from . import actions
+from . import commands
 from . import util
 
 import logging
@@ -28,10 +28,10 @@ def main():
     # Executes the required action
     match args.action:
         case "load":
-            actions.load.run(args=args)
+            commands.load.run(args=args)
 
         case "list":
-            actions.ls.run(args=args)
+            commands.ls.run(args=args)
 
 
 
