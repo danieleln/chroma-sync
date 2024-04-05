@@ -30,6 +30,9 @@ def main():
         case "load":
             commands.load.run(args=args)
 
+        case "reload":
+            commands.reload.run(args=args)
+
         case "list":
             commands.ls.run(args=args)
 

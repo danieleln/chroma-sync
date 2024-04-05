@@ -20,6 +20,7 @@ def build_arg_parser():
     )
 
     add_load_command(subp)
+    add_reload_command(subp)
     add_list_command(subp)
 
 
@@ -38,6 +39,19 @@ def add_load_command(subparser):
              f"a path) or from '{PALETTES_DIR}'. In the latter case, " + \
              f"file extension might be omitted"
     )
+
+    parser.add_argument(
+        "-b", "--backup",
+        action="store_true",
+        help="backups existing templates before overwriting them"
+    )
+
+
+
+
+# Reload sub command options
+def add_reload_command(subparser):
+    parser = subparser.add_parser("reload", help="reloads the last theme")
 
     parser.add_argument(
         "-b", "--backup",

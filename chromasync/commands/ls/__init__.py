@@ -8,7 +8,7 @@ logger = logging.getLogger("chromasync")
 
 
 def run(args: argparse.Namespace) -> None:
-    logger.debug("Running the list action")
+    logger.debug("Running the list command")
 
     if args.palette is True:
         # Palettes contained in the PALETTES_DIR

@@ -30,6 +30,7 @@ POST_SCRIPT_FILE = CONF_DIR / "chromasync-post.sh"
 CACHE_DIR  = Path(os.getenv(_CHROMASYNC_CACHE_DIR_ENV_VAR, _DEFAULT_CACHE_DIR))
 OUTPUT_DIR = CACHE_DIR / "out"
 LOG_FILE   = CACHE_DIR / "chromasync.log"
+CACHED_PALETTE_FILE = CACHE_DIR / "palette.conf"
 
 
 # Builds all the required files and directories
