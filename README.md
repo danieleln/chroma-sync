@@ -55,10 +55,12 @@ Where:
 ```bash
 # Loads a palette either from the filesystem (by specifying a path) or
 # from '~/.config/chromasync/palettes'. In the latter case, file
-# extension might be omitted
-chromasync load "/path/to/palette.conf"
-chromasync load "palette.conf"
-chromasync load "palette"
+# extension might be omitted.
+# --light/--dark variant can be omitted if the palette has only one of
+# them
+chromasync load "/path/to/palette.conf" --dark/--light
+chromasync load "palette.conf" --dark/--light
+chromasync load "palette" --dark/--light
 
 # Reloads a previously loaded palette. Useful when making changes to
 # one or more templates
@@ -98,11 +100,13 @@ colors).
 > in light palettes). For this reason, I decided to refer to them as
 > *highlight* colors.
 
+A single palette file can contain both the `light` and the `dark`
+variant.
+
 Palette files should look like this:
 ```conf
 # one-half-dark.conf
-[Palette]
-
+[Dark]
 # Background and foreground colors
 BG=#282c34
 FG=#dcdfe4
@@ -126,9 +130,13 @@ BLUH=#61afef
 MAGH=#c678dd
 CYNH=#56b6c2
 WHTH=#dcdfe4
+
+
+[Light]
+# Redefine all of the colors for the light variant
 ```
-Note that the section header `[Palette]` is mandatory and all colors
-must be defined.
+Note that at least one of `[Light]`, `[Dark]` section headers must be
+defined and all colors must be present under both headers.
 
 
 
