@@ -60,16 +60,26 @@ chromasync load "/path/to/palette.conf"
 chromasync load "palette.conf"
 chromasync load "palette"
 
+# Reloads a previously loaded palette. Useful when making changes to
+# one or more templates
+chromasync reload
+
 # Lists palettes in ~/.config/chromasync/palettes/
-chromasync list -p
+# The --dark/--light modifiers make chromasync to list only dark/light
+# palettes. The distinction is done simply by checking whether the
+# palette file name contains the string light/dark
+chromasync list --palette
+chromasync list --palette --dark
+chromasync list --palette --light
 
 # Lists templates in ~/.config/chromasync/templates/
-chromasync list -t
+chromasync list --template
 
 # For more infos:
-chromasync -h
-chromasync load -h
-chromasync list -h
+chromasync --help
+chromasync list --help
+chromasync load --help
+chromasync reload --help
 ```
 
 At the moment, templates and palettes must be manually placed in the 
