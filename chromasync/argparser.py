@@ -40,6 +40,20 @@ def add_load_command(subparser):
              f"file extension might be omitted"
     )
 
+    ld_group = parser.add_mutually_exclusive_group(required=False)
+
+    ld_group.add_argument(
+        "-d", "--dark",
+        action="store_true",
+        help="loads the dark variant"
+    )
+
+    ld_group.add_argument(
+        "-l", "--light",
+        action="store_true",
+        help="loads the light variant"
+    )
+
     parser.add_argument(
         "-b", "--backup",
         action="store_true",

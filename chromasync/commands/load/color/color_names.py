@@ -1,7 +1,5 @@
 from enum import Enum
 
-CONF_FILE_SECTION_NAME = "Palette"
-
 
 class BaseColors(Enum):
     BG = "BG"

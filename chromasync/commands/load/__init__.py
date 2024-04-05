@@ -31,7 +31,7 @@ def run(args: argparse.Namespace) -> None:
 def load_palette_from_file(file: Path, args: argparse.Namespace):
 
     # Parses the input color palette
-    palette = Palette.from_conf_file(file=file)
+    palette = Palette.from_conf_file(file=file, args=args)
 
     # Generates all the templates
     build_templates(palette=palette, args=args)
