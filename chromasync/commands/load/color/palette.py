@@ -11,9 +11,9 @@ from .os_colors import get_os_colors
 from .hexcolor import HexColor
 
 
-DARK_VARIANT  = "Dark"
-LIGHT_VARIANT = "Light"
-METADATA_HEADER = "Metadata"
+DARK_VARIANT  = "dark"
+LIGHT_VARIANT = "light"
+METADATA_HEADER = "metadata"
 
 
 
