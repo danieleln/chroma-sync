@@ -85,7 +85,6 @@ class Palette:
             color = color.value
 
             try:
-                # TODO: add support for light theme
                 color_hex_string = config.get(variant, color)
 
             except configparser.NoOptionError:
@@ -200,8 +199,9 @@ def select_variant(config: configparser.ConfigParser, args: argparse.Namespace, 
         # Palette has both variants and no variant was specified
         # in the arguments => can't decide which one to load
         logger.critical(
-            f"Palette '{file}' has both variants. Specify which one " + \
-            f"to load by adding either of the options `--dark`, `--light`"
+            f"Palette '{file}' has both a light and a dark variant. " + \
+            f"Specify which one to load by adding either of the " + \
+            f"options `--dark`, `--light`"
         )
         sys.exit(1)
 
