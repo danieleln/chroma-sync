@@ -1,4 +1,4 @@
-from ...config import POST_SCRIPT_FILE
+from ...config.environment import POST_SCRIPT_FILE
 
 import subprocess
 import logging

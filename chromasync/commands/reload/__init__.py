@@ -2,7 +2,7 @@ from ..load.specialize_templates import build_templates
 from ..load.post_gen_script import run_post_gen_script
 from ..load.color import Palette
 
-from ...config import CACHED_PALETTE_FILE
+from ...config.environment import CACHED_PALETTE_FILE
 
 import argparse
 import logging

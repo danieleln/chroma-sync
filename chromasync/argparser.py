@@ -1,4 +1,4 @@
-from .config import PALETTES_DIR
+from .config.environment import PALETTES_DIR
 import argparse
 
 

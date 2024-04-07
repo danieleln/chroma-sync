@@ -1,5 +1,5 @@
 from .argparser import build_arg_parser
-from .config import build_environment
+from .config.environment import build_environment
 from . import commands
 from . import util
 

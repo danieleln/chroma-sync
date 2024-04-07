@@ -4,16 +4,13 @@ import argparse
 import logging
 import sys
 
-from ....config import PALETTES_DIR, CACHED_PALETTE_FILE
+from ....config.confspecs import DARK_VARIANT, LIGHT_VARIANT, METADATA_HEADER
+from ....config.environment import PALETTES_DIR, CACHED_PALETTE_FILE
+from ....config.colors import BaseColors, get_os_colors
 
-from .color_names import BaseColors
-from .os_colors import get_os_colors
 from .hexcolor import HexColor
 
 
-DARK_VARIANT  = "dark"
-LIGHT_VARIANT = "light"
-METADATA_HEADER = "metadata"
 
 
 

@@ -3,7 +3,7 @@ from .post_gen_script import run_post_gen_script
 from .find_palette_file import find_palette_file
 from .color import Palette
 
-from ...config import CACHED_PALETTE_FILE
+from ...config.environment import CACHED_PALETTE_FILE
 
 from pathlib import Path
 import argparse

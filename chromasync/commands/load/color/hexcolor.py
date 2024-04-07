@@ -1,15 +1,10 @@
-from enum import Enum
 import logging
 import sys
 import re
 
+from ....config.directives import ColorFmtSpecs
 
 logger = logging.getLogger("chromasync")
-
-
-class ColorFmtSpecs(Enum):
-    HEX_W_HASHTAG  = "#hex"
-    HEX_WO_HASHTAG = "hex"
 
 
 

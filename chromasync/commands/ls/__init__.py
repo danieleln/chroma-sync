@@ -1,4 +1,4 @@
-from ...config import TEMPLATES_DIR, PALETTES_DIR
+from ...config.environment import TEMPLATES_DIR, PALETTES_DIR
 from ..load.color.palette import DARK_VARIANT, LIGHT_VARIANT
 from ..load.color.palette import Palette
 

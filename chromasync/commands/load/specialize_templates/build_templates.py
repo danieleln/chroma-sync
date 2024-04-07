@@ -1,5 +1,6 @@
-from ....config import TEMPLATES_DIR, OUTPUT_DIR
-from ..color import Palette, HexColor, ColorFmtSpecs
+from ....config.environment import TEMPLATES_DIR, OUTPUT_DIR
+from ..color import Palette, HexColor
+from ....config.directives import ColorFmtSpecs
 
 from .parse_directive import parse_directives, Directives
 from .replace_colors import replace_colors

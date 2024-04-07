@@ -1,2 +1,3 @@
 from .palette import Palette
-from .hexcolor import HexColor, ColorFmtSpecs
+from .hexcolor import HexColor
+from ....config.directives import ColorFmtSpecs

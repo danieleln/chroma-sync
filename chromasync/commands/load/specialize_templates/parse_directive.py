@@ -1,12 +1,8 @@
-from enum import Enum
+from ....config.directives import Directives
+
 import logging
 
 logger = logging.getLogger("chromasync")
-
-
-class Directives(Enum):
-    OUT_FILE     = "@out:"
-    COLOR_FORMAT = "@fmt:"
 
 
 def parse_directives(lines: list[str]) -> tuple[str, dict]:

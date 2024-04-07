@@ -2,7 +2,7 @@ import logging.config
 import argparse
 
 from .color_formatter import ColorFormatter
-from ...config import LOG_FILE
+from ...config.environment import LOG_FILE
 
 log_config = {
     "version": 1,

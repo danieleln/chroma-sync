@@ -177,7 +177,7 @@ Colors can be specified with `{COLOR_NAME}` where `COLOR_NAME` must be:
   > distros, like Arch, Debian, EndeavourOS, Manjaro, PopOS and Ubuntu.
   > Plus, I tested them only on Ubuntu and EndeavourOS.
   > Feel free to add other distros and test them out. OS color are
-  > defined in `chromasync/actions/load/color/os_colors.py`
+  > defined in `chromasync/config/colors.py`
 
 
 ### Composite Colors Placeholders

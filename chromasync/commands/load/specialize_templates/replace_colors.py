@@ -1,4 +1,5 @@
-from ..color import Palette, HexColor, ColorFmtSpecs
+from ..color import Palette, HexColor
+from ....config.directives import ColorFmtSpecs
 
 from .parse_directive import Directives
 
