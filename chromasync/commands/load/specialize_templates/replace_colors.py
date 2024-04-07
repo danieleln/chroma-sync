@@ -11,8 +11,7 @@ logger = logging.getLogger("chromasync")
 
 
 # Matches expressions of the form {RED}, {RED:60:YLW}
-COLOR_REGEX = r"\{([^:}]+)(?:(?::(\d+))(?::([^:}]+)))?\}"
-
+COLOR_REGEX = r"\{(\w+)(?::(\d+):(\w+))?\}"
 
 def replace_colors(template: str, palette: Palette, directives: dict) -> str:
     logger.debug(f"Replacing color definitions")
