@@ -71,7 +71,7 @@ class Palette:
         config = load_palette_conf_file(file=file, args=args)
 
         # Selects which of the light/dark variant to load
-        variant = select_variant(config=config, args=args)
+        variant = select_variant(config=config, args=args, file=file)
 
         # Stores a copy of the palette file
         write_palette_conf_file(config=config, variant=variant, path=CACHED_PALETTE_FILE)
@@ -126,7 +126,7 @@ def load_palette_conf_file(file: Path, args: argparse.Namespace) -> configparser
         sys.exit(1)
 
     except Exception as e:
-        logger.critical(f"An error occurred while parsing palette '{path}': {e}")
+        logger.critical(f"An error occurred while parsing palette '{file}': {e}")
         sys.exit(1)
 
 
@@ -145,13 +145,16 @@ def write_palette_conf_file(config: configparser.ConfigParser, variant: str, pat
 
     config[METADATA_HEADER]["variant"] = variant
 
-    with open(path, "w") as f:
-        config.write(f)
+    try:
+        with open(path, "w") as f:
+            config.write(f)
+    except Exception as e:
+        logger.error(f"An error occurred while writing cache file '{path}': {e}")
 
 
 
 # Finds which variant (dark/light) to load
-def select_variant(config: configparser.ConfigParser, args: argparse.Namespace) -> str:
+def select_variant(config: configparser.ConfigParser, args: argparse.Namespace, file: Path) -> str:
 
     has_dark = config.has_section(DARK_VARIANT)
     has_light = config.has_section(LIGHT_VARIANT)
