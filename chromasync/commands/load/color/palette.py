@@ -21,8 +21,11 @@ logger = logging.getLogger("chromasync")
 
 
 class Palette:
-    def __init__(self, palette: dict) -> "Palette":
+    def __init__(self, palette: dict, header: str) -> "Palette":
+        # Actual palette
         self._palette = palette
+        # Light/dark header
+        self._header = header
 
 
     # Retrieves the HexColor from its name
@@ -58,6 +61,18 @@ class Palette:
         self._palette[composite_color_name] = composite_color
 
         return composite_color
+
+
+    # Stores the palette to a config file
+    def to_conf_file(self, path: Path) -> None:
+        config = configparser.ConfigParser()
+        config[self._header] = {}
+
+        for color in BaseColors:
+            config[self._header][color.value] = self._palette[color.value].to_hex()
+
+        with open(path, "w") as f:
+            config.write(f)
 
 
     # Creates a new palette from a file
@@ -98,9 +113,9 @@ class Palette:
 
         # Finds which variant (dark/light) to load
         header = None
-        if args.dark is True:
+        if hasattr(args, 'dark') and args.dark is True:
             header = CONF_FILE_DARK_SECTION_HEADER
-        elif args.light is True:
+        elif hasattr(args, 'light') and args.light is True:
             header = CONF_FILE_LIGHT_SECTION_HEADER
         else:
             # Palette has both variants and no variant was specified
@@ -153,7 +168,7 @@ class Palette:
 
 
         # Wraps the palette
-        return cls(palette=palette)
+        return cls(palette=palette, header=header)
 
 
 

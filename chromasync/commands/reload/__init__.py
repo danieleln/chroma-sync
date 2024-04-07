@@ -1,4 +1,6 @@
-from .. import load
+from ..load.specialize_templates import build_templates
+from ..load.post_gen_script import run_post_gen_script
+from ..load.color import Palette
 
 from ...config import CACHED_PALETTE_FILE
 
@@ -17,4 +19,11 @@ def run(args: argparse.Namespace):
         logger.critical("No previous loaded palette. Run the `load` command first")
         sys.exit(1)
 
-    load.load_palette_from_file(CACHED_PALETTE_FILE, args)
+    # Stores a json copy of thePalettepalette
+    palette = Palette.from_conf_file(CACHED_PALETTE_FILE, args=args)
+
+    # Generates all the templates
+    build_templates(palette=palette, args=args)
+
+    # Runs post-generation script
+    run_post_gen_script()
