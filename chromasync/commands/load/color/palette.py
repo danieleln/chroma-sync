@@ -108,6 +108,8 @@ class Palette:
 
 
 def load_palette_conf_file(file: Path, args: argparse.Namespace) -> configparser.ConfigParser:
+    logger.debug(f"Parsing '{file}'")
+
     config = configparser.ConfigParser()
 
     try:
@@ -126,15 +128,12 @@ def load_palette_conf_file(file: Path, args: argparse.Namespace) -> configparser
         sys.exit(1)
 
 
-    # Checks if at least one variant is present
-    has_dark = config.has_section(DARK_VARIANT)
-    has_light = config.has_section(LIGHT_VARIANT)
-
-
     return config
 
 
 def write_palette_conf_file(config: configparser.ConfigParser, variant: str, path: Path) -> None:
+    logger.debug("Caching palette file")
+
     # Adds the variant specification
     if not config.has_section(METADATA_HEADER):
         config[METADATA_HEADER] = {}
@@ -151,6 +150,7 @@ def write_palette_conf_file(config: configparser.ConfigParser, variant: str, pat
 
 # Finds which variant (dark/light) to load
 def select_variant(config: configparser.ConfigParser, args: argparse.Namespace, file: Path) -> str:
+    logger.debug("Selecting dark/light variant")
 
     has_dark = config.has_section(DARK_VARIANT)
     has_light = config.has_section(LIGHT_VARIANT)
@@ -162,6 +162,7 @@ def select_variant(config: configparser.ConfigParser, args: argparse.Namespace, 
             logger.critical(f"Palette '{file}' has no variant `[{DARK_VARIANT}]`")
             sys.exit(1)
 
+        logger.debug("Selected dark variant from --dark option")
         return DARK_VARIANT
 
 
@@ -171,6 +172,7 @@ def select_variant(config: configparser.ConfigParser, args: argparse.Namespace, 
             logger.critical(f"Palette '{file}' has no variant `[{LIGHT_VARIANT}]`")
             sys.exit(1)
 
+        logger.debug("Selected light variant from --light option")
         return LIGHT_VARIANT
 
 
@@ -181,6 +183,7 @@ def select_variant(config: configparser.ConfigParser, args: argparse.Namespace, 
         variant = config.get(METADATA_HEADER, "variant")
 
         if variant in (DARK_VARIANT, LIGHT_VARIANT):
+            logger.debug(f"Selected {variant} variant from metadata section")
             return variant
 
         logger.critical(
@@ -203,9 +206,11 @@ def select_variant(config: configparser.ConfigParser, args: argparse.Namespace, 
         sys.exit(1)
 
     if has_dark:
+        logger.debug(f"Selected dark variant. It's the only one available")
         return DARK_VARIANT
 
     if has_light:
+        logger.debug(f"Selected light variant. It's the only one available")
         return LIGHT_VARIANT
 
 
