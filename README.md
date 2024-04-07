@@ -20,24 +20,26 @@ chromasync -h
 
 ## chromasync Directories
 ```
-$HOME
+$CHROMASYNC_CONFIG_DIR
 │
-├── .config/chromasync/
-│    │
-│    ├── chromasync-post.sh
-│    │
-│    ├── palettes/ 
-│    │
-│    └── templates/
+├── chromasync-post.sh
 │
-└── .cache/chromasync/
-     │
-     ├── chromasync.log
-     │
-     └── out/ 
+├── palettes/ 
+│
+└── templates/
+
+$CHROMASYNC_CACHE_DIR
+│
+├── chromasync.log
+│
+└── out/
 ```
 
-Where:
+If `$CHROMASYNC_CONFIG_DIR` is not defined, it defaults to `$HOME/.config`.
+If `$CHROMASYNC_CACHE_DIR` is not defined, it defaults to `$HOME/.cache`.
+
+
+Files and folders:
 
 - `chromasync-post.sh` is a shell script that is executed every
   time after chromasync finishes to run. It's useful to make other
@@ -57,16 +59,17 @@ Where:
 # from '~/.config/chromasync/palettes'. In the latter case, file
 # extension might be omitted.
 # --light/--dark variant can be omitted if the palette has only one of
-# them
+# them.
 chromasync load "/path/to/palette.conf" --dark/--light
 chromasync load "palette.conf" --dark/--light
 chromasync load "palette" --dark/--light
 
 # Reloads a previously loaded palette. Useful when making changes to
-# one or more templates
+# one or more templates. Adding the --dark/--light option makes
+# chromasync to reload the dark/light variant of the current palette.
 chromasync reload
 
-# Lists palettes in ~/.config/chromasync/palettes/
+# Lists palettes in $CHROMASYNC_CONFIG_DIR/palettes/
 # The --dark/--light modifiers make chromasync to list only dark/light
 # palettes. The distinction is done simply by checking whether the
 # palette file name contains the string light/dark
@@ -74,7 +77,7 @@ chromasync list --palette
 chromasync list --palette --dark
 chromasync list --palette --light
 
-# Lists templates in ~/.config/chromasync/templates/
+# Lists templates in $CHROMASYNC_CONFIG_DIR/templates/
 chromasync list --template
 
 # For more infos:
@@ -91,22 +94,20 @@ respective folders.
 
 
 ## Palette Files
-Palette files contains the 18 colors used to theme the terminal (one
-background color, one foreground color, 8 normal colors and 8 highlight
-colors).
+Palette files are `.conf` files that contains a list of colors for the
+`light` and `dark` variants of the theme.
+Each variant consists in 18 colors: one background color, one foreground
+color, 8 normal colors and 8 highlight colors).
 
 > NOTE: *highlight* colors are usually called *bright* colors. However,
 > those colors might also be *darker* than normal colors (mostly true
 > in light palettes). For this reason, I decided to refer to them as
 > *highlight* colors.
 
-A single palette file can contain both the `light` and the `dark`
-variant.
-
 Palette files should look like this:
 ```conf
 # one-half-dark.conf
-[Dark]
+[dark]
 # Background and foreground colors
 BG=#282c34
 FG=#dcdfe4
@@ -132,10 +133,11 @@ CYNH=#56b6c2
 WHTH=#dcdfe4
 
 
-[Light]
-# Redefine all of the colors for the light variant
+[light]
+# Redefine all colors for the light variant
+...
 ```
-Note that at least one of `[Light]`, `[Dark]` section headers must be
+Note that at least one of `[light]`, `[dark]` section headers must be
 defined and all colors must be present under both headers.
 
 
@@ -185,8 +187,8 @@ Colors can be specified with `{COLOR_NAME}` where `COLOR_NAME` must be:
 means a mixture of 70% `FG` and 30% `BG`. Any of the basic colors can
 be used to generate a composite color.
 
-Composite colors are particularly useful when dealing with both light
-and dark themes.
+Composite colors are particularly useful to make template compatible
+with both light and dark palettes.
 As an example, the color `{WHT}` has a good contrast on dark themes,
 but a poor contrast in light themes.
 On the other hand, the color `{FG:70:BG}` works regardless of the theme.
