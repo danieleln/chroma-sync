@@ -1,6 +1,9 @@
-from ...config.environment import TEMPLATES_DIR, PALETTES_DIR
 from ..load.color.palette import DARK_VARIANT, LIGHT_VARIANT
 from ..load.color.palette import Palette
+
+from ...config.environment import TEMPLATES_DIR, PALETTES_DIR
+
+from ...util import list_dir_content
 
 from pathlib import Path
 import configparser
@@ -15,7 +18,7 @@ def run(args: argparse.Namespace) -> None:
 
     if args.palette is True:
         # Palettes contained in the PALETTES_DIR
-        palettes = ls_dir(PALETTES_DIR, remove_suffix=True)
+        palettes = list_dir_content(PALETTES_DIR, remove_suffix=True)
 
         print(f"Found the following", end=" ")
 
@@ -34,22 +37,8 @@ def run(args: argparse.Namespace) -> None:
     else:
         print(f"Found the following templates in '{TEMPLATES_DIR}'")
         # Templates contained in TEMPLATES_DIR
-        templates = ls_dir(TEMPLATES_DIR)
+        templates = list_dir_content(TEMPLATES_DIR)
         print("\t" + "\n\t".join(templates))
-
-
-
-
-
-def ls_dir(path: Path, remove_suffix: bool=False) -> None:
-    files = sorted({f for f in path.iterdir() if f.is_file()})
-
-    if remove_suffix is True:
-        names = map(lambda f: f.stem, files)
-    else:
-        names = map(lambda f: f.name, files)
-
-    return names
 
 
 

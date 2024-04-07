@@ -1,5 +1,6 @@
-from enum import Enum
+from ..util import get_linux_distro
 
+from enum import Enum
 import logging
 logger = logging.getLogger("chromasync")
 
@@ -79,18 +80,3 @@ def get_os_colors(palette: dict):
         OSColors.OS1H.value : fg_color,
         OSColors.OS2H.value : fg_color,
     }
-
-
-
-
-# Retrieves the current distro by reading file /etc/os-release
-def get_linux_distro():
-    try:
-        with open('/etc/os-release', 'r') as f:
-            for line in f:
-                if line.startswith('NAME='):
-                    return line.split('=')[1].strip().strip('"')
-
-    except FileNotFoundError:
-        logger.error("Can't find file /etc/os-release")
-        return "?"
