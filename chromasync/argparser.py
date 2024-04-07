@@ -40,18 +40,11 @@ def add_load_command(subparser):
              f"file extension might be omitted"
     )
 
-    ld_group = parser.add_mutually_exclusive_group(required=False)
-
-    ld_group.add_argument(
-        "-d", "--dark",
-        action="store_true",
-        help="loads the dark variant"
-    )
-
-    ld_group.add_argument(
-        "-l", "--light",
-        action="store_true",
-        help="loads the light variant"
+    add_light_dark_group(
+        parser=parser,
+        required=False,
+        light_help="loads the light variant",
+        dark_help="loads the dark variant",
     )
 
     parser.add_argument(
@@ -59,6 +52,7 @@ def add_load_command(subparser):
         action="store_true",
         help="backups existing templates before overwriting them"
     )
+
 
 
 
@@ -71,6 +65,13 @@ def add_reload_command(subparser):
         "-b", "--backup",
         action="store_true",
         help="backups existing templates before overwriting them"
+    )
+
+    add_light_dark_group(
+        parser=parser,
+        required=False,
+        light_help="reloads the light variant theme",
+        dark_help="reloads the dark variant of the current theme",
     )
 
 
@@ -94,19 +95,11 @@ def add_list_command(subparser):
         help=f"shows available templates"
     )
 
-
-    ld_group = parser.add_mutually_exclusive_group(required=False)
-
-    ld_group.add_argument(
-        "-d", "--dark",
-        action="store_true",
-        help="lists dark palettes only"
-    )
-
-    ld_group.add_argument(
-        "-l", "--light",
-        action="store_true",
-        help="lists light palettes only"
+    add_light_dark_group(
+        parser=parser,
+        required=False,
+        light_help="lists light palettes only",
+        dark_help="lists dark palettes only",
     )
 
 
@@ -130,4 +123,18 @@ def add_verbosity_opts(parser):
 
 
 
+# Adds --light/--dark option pair
+def add_light_dark_group(parser, required: bool, light_help: str, dark_help: str):
+    ld_group = parser.add_mutually_exclusive_group(required=False)
 
+    ld_group.add_argument(
+        "-d", "--dark",
+        action="store_true",
+        help=dark_help,
+    )
+
+    ld_group.add_argument(
+        "-l", "--light",
+        action="store_true",
+        help=light_help,
+    )

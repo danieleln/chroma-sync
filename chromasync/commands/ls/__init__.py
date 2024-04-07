@@ -1,5 +1,5 @@
 from ...config import TEMPLATES_DIR, PALETTES_DIR
-from ..load.color.palette import CONF_FILE_DARK_SECTION_HEADER, CONF_FILE_LIGHT_SECTION_HEADER
+from ..load.color.palette import DARK_VARIANT, LIGHT_VARIANT
 from ..load.color.palette import Palette
 
 from pathlib import Path
@@ -21,10 +21,10 @@ def run(args: argparse.Namespace) -> None:
 
         # Filters dark/light palettes only
         if args.dark is True:
-            palettes = filter_palettes(palettes, CONF_FILE_DARK_SECTION_HEADER)
+            palettes = filter_palettes(palettes, DARK_VARIANT)
             print("dark", end=" ")
         elif args.light is True:
-            palettes = filter_palettes(palettes, CONF_FILE_LIGHT_SECTION_HEADER)
+            palettes = filter_palettes(palettes, LIGHT_VARIANT)
             print("light", end=" ")
 
         print(f"palettes in '{PALETTES_DIR}'")

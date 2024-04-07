@@ -8,7 +8,6 @@ from ...config import CACHED_PALETTE_FILE
 from pathlib import Path
 import argparse
 import logging
-import shutil
 
 logger = logging.getLogger("chromasync")
 
@@ -21,9 +20,6 @@ def run(args: argparse.Namespace) -> None:
 
     # Parses the input color palette
     palette = Palette.from_conf_file(file=file, args=args)
-
-    # Stores a copy of the palette
-    palette.to_conf_file(path=CACHED_PALETTE_FILE)
 
     # Generates all the templates
     build_templates(palette=palette, args=args)

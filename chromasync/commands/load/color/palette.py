@@ -4,15 +4,16 @@ import argparse
 import logging
 import sys
 
-from ....config import PALETTES_DIR
+from ....config import PALETTES_DIR, CACHED_PALETTE_FILE
 
 from .color_names import BaseColors
 from .os_colors import get_os_colors
 from .hexcolor import HexColor
 
 
-CONF_FILE_DARK_SECTION_HEADER  = "Dark"
-CONF_FILE_LIGHT_SECTION_HEADER = "Light"
+DARK_VARIANT  = "Dark"
+LIGHT_VARIANT = "Light"
+METADATA_HEADER = "Metadata"
 
 
 
@@ -21,11 +22,9 @@ logger = logging.getLogger("chromasync")
 
 
 class Palette:
-    def __init__(self, palette: dict, header: str) -> "Palette":
+    def __init__(self, palette: dict) -> "Palette":
         # Actual palette
         self._palette = palette
-        # Light/dark header
-        self._header = header
 
 
     # Retrieves the HexColor from its name
@@ -63,81 +62,19 @@ class Palette:
         return composite_color
 
 
-    # Stores the palette to a config file
-    def to_conf_file(self, path: Path) -> None:
-        config = configparser.ConfigParser()
-        config[self._header] = {}
-
-        for color in BaseColors:
-            config[self._header][color.value] = self._palette[color.value].to_hex()
-
-        with open(path, "w") as f:
-            config.write(f)
-
-
     # Creates a new palette from a file
     @classmethod
     def from_conf_file(cls, file: Path, args: argparse.Namespace) -> "Palette":
         logger.info(f"Parsing palette from file '{file}'")
 
-        # Parses the palette '.conf' file
-        config = configparser.ConfigParser()
-        try:
-            config.read(file)
+        # loads the palette file
+        config = load_palette_conf_file(file=file, args=args)
 
-        except configparser.MissingSectionHeaderError:
-            logger.critical(
-                f"Missing section header in '{file}'." + \
-                f"Expected at least one of `[{CONF_FILE_DARK_SECTION_HEADER}]`, " + \
-                f"`[{CONF_FILE_LIGHT_SECTION_HEADER}]` before color definition"
-            )
-            sys.exit(1)
+        # Selects which of the light/dark variant to load
+        variant = select_variant(config=config, args=args)
 
-        except Exception as e:
-            logger.critical(f"An error occurred while parsing palette '{path}': {e}")
-            sys.exit(1)
-
-
-        # Checks if at least one variant is present
-        has_dark = config.has_section(CONF_FILE_DARK_SECTION_HEADER)
-        has_light = config.has_section(CONF_FILE_LIGHT_SECTION_HEADER)
-
-        if not (has_dark or has_light):
-            logger.critical(
-                f"Missing section header in '{file}'." + \
-                f"Expected at least one of `[{CONF_FILE_DARK_SECTION_HEADER}]`, " + \
-                f"`[{CONF_FILE_LIGHT_SECTION_HEADER}]` before color definition"
-            )
-            sys.exit(1)
-
-
-        # Finds which variant (dark/light) to load
-        header = None
-        if hasattr(args, 'dark') and args.dark is True:
-            header = CONF_FILE_DARK_SECTION_HEADER
-        elif hasattr(args, 'light') and args.light is True:
-            header = CONF_FILE_LIGHT_SECTION_HEADER
-        else:
-            # Palette has both variants and no variant was specified
-            # in the arguments => can't decide which one to load
-            if has_dark and has_light:
-                logger.critical(
-                    f"Specify which variant to load by adding either " + \
-                    f"`--dark` or `--light`. Palette '{file}' has both variants"
-                )
-                sys.exit(1)
-
-            if has_dark:
-                header = CONF_FILE_DARK_SECTION_HEADER
-            elif has_light:
-                header = CONF_FILE_LIGHT_SECTION_HEADER
-
-
-        # Checks if the required header is available
-        if not config.has_section(header):
-            logger.critical(f"Palette '{file}' has no header `[{header}]`")
-            sys.exit(1)
-
+        # Stores a copy of the palette file
+        write_palette_conf_file(config=config, variant=variant, path=CACHED_PALETTE_FILE)
 
         # Retreives color informations
         palette = { }
@@ -149,7 +86,7 @@ class Palette:
 
             try:
                 # TODO: add support for light theme
-                color_hex_string = config.get(header, color)
+                color_hex_string = config.get(variant, color)
 
             except configparser.NoOptionError:
                 logger.critical(f"Missing color '{color}' in '{file}'")
@@ -168,9 +105,114 @@ class Palette:
 
 
         # Wraps the palette
-        return cls(palette=palette, header=header)
+        return cls(palette=palette)
 
 
 
 
 
+def load_palette_conf_file(file: Path, args: argparse.Namespace) -> configparser.ConfigParser:
+    config = configparser.ConfigParser()
+
+    try:
+        config.read(file)
+
+    except configparser.MissingSectionHeaderError:
+        logger.critical(
+            f"Missing section variant in '{file}'." + \
+            f"Expected at least one of `[{DARK_VARIANT}]`, " + \
+            f"`[{LIGHT_VARIANT}]` before color definition"
+        )
+        sys.exit(1)
+
+    except Exception as e:
+        logger.critical(f"An error occurred while parsing palette '{path}': {e}")
+        sys.exit(1)
+
+
+    # Checks if at least one variant is present
+    has_dark = config.has_section(DARK_VARIANT)
+    has_light = config.has_section(LIGHT_VARIANT)
+
+
+    return config
+
+
+def write_palette_conf_file(config: configparser.ConfigParser, variant: str, path: Path) -> None:
+    # Adds the variant specification
+    if not config.has_section(METADATA_HEADER):
+        config[METADATA_HEADER] = {}
+
+    config[METADATA_HEADER]["variant"] = variant
+
+    with open(path, "w") as f:
+        config.write(f)
+
+
+
+# Finds which variant (dark/light) to load
+def select_variant(config: configparser.ConfigParser, args: argparse.Namespace) -> str:
+
+    has_dark = config.has_section(DARK_VARIANT)
+    has_light = config.has_section(LIGHT_VARIANT)
+
+
+    # Requested dark theme
+    if args.dark is True:
+        if not has_dark:
+            logger.critical(f"Palette '{file}' has no variant `[{DARK_VARIANT}]`")
+            sys.exit(1)
+
+        return DARK_VARIANT
+
+
+    # Requested light theme
+    if args.light is True:
+        if not has_light:
+            logger.critical(f"Palette '{file}' has no variant `[{LIGHT_VARIANT}]`")
+            sys.exit(1)
+
+        return LIGHT_VARIANT
+
+
+    # No variant was explicitly requested
+
+    # Looks for a metadata tag
+    if config.has_option(METADATA_HEADER, "variant"):
+        variant = config.get(METADATA_HEADER, "variant")
+
+        if variant in (DARK_VARIANT, LIGHT_VARIANT):
+            return variant
+
+        logger.critical(
+            f"Invalid variant specification `{variant}` in palette file '{file}'. " + \
+            f"Valid values are `{DARK_VARIANT}`, " + \
+            f"`{LIGHT_VARIANT}`"
+        )
+        sys.exit(1)
+
+
+    # Looks for available variants
+    if has_dark and has_light:
+        # Palette has both variants and no variant was specified
+        # in the arguments => can't decide which one to load
+        logger.critical(
+            f"Palette '{file}' has both variants. Specify which one " + \
+            f"to load by adding either of the options `--dark`, `--light`"
+        )
+        sys.exit(1)
+
+    if has_dark:
+        return DARK_VARIANT
+
+    if has_light:
+        return LIGHT_VARIANT
+
+
+    # Palette has no variant specification
+    logger.critical(
+        f"Missing section variant in '{file}'." + \
+        f"Expected at least one of `[{DARK_VARIANT}]`, " + \
+        f"`[{LIGHT_VARIANT}]` before color definition"
+    )
+    sys.exit(1)
