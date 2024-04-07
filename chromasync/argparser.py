@@ -68,6 +68,12 @@ def add_reload_command(subparser):
         dark_help="reloads the dark variant of the current palette",
     )
 
+    parser.add_argument(
+        "-b", "--backup",
+        action="store_true",
+        help="backups existing templates before overwriting them"
+    )
+
 
 
 
