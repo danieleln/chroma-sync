@@ -61,17 +61,11 @@ def add_load_command(subparser):
 def add_reload_command(subparser):
     parser = subparser.add_parser("reload", help="reloads the last theme")
 
-    parser.add_argument(
-        "-b", "--backup",
-        action="store_true",
-        help="backups existing templates before overwriting them"
-    )
-
     add_light_dark_group(
         parser=parser,
         required=False,
-        light_help="reloads the light variant theme",
-        dark_help="reloads the dark variant of the current theme",
+        light_help="reloads the light variant of the current palette",
+        dark_help="reloads the dark variant of the current palette",
     )
 
 
