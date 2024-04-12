@@ -19,11 +19,12 @@ def run(args: argparse.Namespace):
         logger.critical("No previous loaded palette. Run the `load` command first")
         sys.exit(1)
 
-    # Stores a json copy of thePalettepalette
+    # Stores a json copy of the palette
     palette = Palette.from_conf_file(CACHED_PALETTE_FILE, args=args)
 
     # Generates all the templates
     build_templates(palette=palette, args=args)
 
     # Runs post-generation script
-    run_post_gen_script()
+    if not args.no_script:
+        run_post_gen_script()

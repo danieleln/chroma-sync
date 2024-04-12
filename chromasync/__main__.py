@@ -7,7 +7,6 @@ import logging
 
 
 
-
 def main():
     # Builds chromasync files and directories
     build_environment()
