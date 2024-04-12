@@ -69,6 +69,12 @@ def add_reload_command(subparser):
     )
 
     parser.add_argument(
+        "-t", "--template",
+        action="append",
+        help="template to reload. If not specified, all templates are reloaded"
+    )
+
+    parser.add_argument(
         "--no-script",
         action="store_true",
         help="prevents the execution of `chromasync-post.sh`"
