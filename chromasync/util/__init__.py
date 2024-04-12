@@ -1,4 +1,5 @@
 from . import logging_config
+from .smart_search_file import smart_search_file, smart_search_palette_file
 
 from pathlib import Path
 
