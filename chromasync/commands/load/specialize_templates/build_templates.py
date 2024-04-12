@@ -1,6 +1,8 @@
 from ....config.environment import TEMPLATES_DIR, OUTPUT_DIR
-from ..color import Palette, HexColor
 from ....config.directives import ColorFmtSpecs
+from ....util import smart_search_template_file
+
+from ..color import Palette, HexColor
 
 from .parse_directive import parse_directives, Directives
 from .replace_colors import replace_colors
@@ -18,6 +20,21 @@ logger = logging.getLogger("chromasync")
 def build_templates(palette: Palette, args: Namespace) -> None:
     logger.debug(f"Specializing templates")
 
+    # The `reload` command can have templates passed as arguments
+    if hasattr(args, "template") and args.template is not None:
+        for template in args.template:
+            # Looks for the specified templates
+            file = smart_search_template_file(template)
+
+            # Builds the templates
+            if file is not None:
+                build_template(
+                    template_path=file, palette=palette, args=args)
+
+        return
+
+
+    # If no template is specified, looks for all templates
     for template_path in TEMPLATES_DIR.iterdir():
 
         # Ignores directories

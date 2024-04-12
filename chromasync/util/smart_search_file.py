@@ -1,7 +1,11 @@
 from pathlib import Path
 import argparse
 
-from ..config.environment import PALETTES_DIR
+from ..config.environment import PALETTES_DIR, TEMPLATES_DIR
+
+import logging
+
+logger = logging.getLogger("chromasync")
 
 
 def smart_search_file(file: Path, dir: Path=None, ext: str=None) -> Path:
@@ -33,19 +37,31 @@ def smart_search_file(file: Path, dir: Path=None, ext: str=None) -> Path:
 
 
 
-def smart_search_palette_file(args: argparse.Namespace) -> Path:
-    # Looks for a file in the whole file system
-    # e.g.: `chromasync load "path/to/my/palette.conf"`
+def smart_search_palette_file(palette: str) -> Path:
     file = smart_search_file(
-        file=Path(args.palette),
+        file=Path(palette),
         dir=PALETTES_DIR,
         ext=".conf"
     )
 
-
     if file is None:
         # Unable to find the specified palette
-        logger.critical(f"Unable to find file/palette '{args.palette}'")
+        logger.critical(f"Unable to find palette '{palette}'")
         sys.exit(1)
+
+    return file
+
+
+
+
+def smart_search_template_file(template: str) -> Path:
+    file = smart_search_file(
+        file=Path(template),
+        dir=TEMPLATES_DIR,
+        ext=".conf"
+    )
+
+    if file is None:
+        logger.error(f"Unable to find template '{template}'")
 
     return file

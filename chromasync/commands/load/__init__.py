@@ -16,7 +16,7 @@ def run(args: argparse.Namespace) -> None:
     logger.debug("Running the load command")
 
     # Looks for a palette file
-    file = smart_search_palette_file(args=args)
+    file = smart_search_palette_file(palette=args.palette)
 
     # Parses the input color palette
     palette = Palette.from_conf_file(file=file, args=args)
