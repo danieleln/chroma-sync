@@ -150,8 +150,10 @@ colors and which color to place.
 
 A simple template file might look something like this:
 ```conf
+# my-app.conf
+
 @fmt: hex
-@out: ~/.config/my-app/my-app.conf
+@dir: ~/.config/my-app/
 
 # template file for application my-app
 background_color={BG}
@@ -202,5 +204,8 @@ file. There are two types of directives:
   the template. There are two available formats right now:
     - `@fmt: #hex` : `{RED}` -> `#ff0000`
     - `@fmt: hex`  : `{RED}` -> `ff0000`
-- output directive `@out:`. It determines where to save the generated
-  scheme. If not specified, it's saved in `~/.cache/chromasync/out/`
+- output directory directive `@dir:`. It determines where to save the generated
+  scheme.
+  `@dir` should point to a directory, not to a file.
+  If not specified, it's saved in `~/.cache/chromasync/out/`.
+  The file name will be the same as the template file.
