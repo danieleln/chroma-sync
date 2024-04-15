@@ -2,7 +2,7 @@ from enum import Enum
 
 
 class Directives(Enum):
-    OUT_DIR      = "@dir"
+    OUT_DIR      = "@dir:"
     COLOR_FORMAT = "@fmt:"
 
 
