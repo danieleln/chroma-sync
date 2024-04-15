@@ -67,12 +67,15 @@ def build_template(template_path: str, palette: Palette, args: Namespace) -> Non
     specialized_template = replace_colors(
         template=template, palette=palette, directives=directives)
 
-    # Looks for the OUT_FILE directive. If it doesn't find it, just
+    # Looks for the OUT_DIR directive. If it doesn't find it, just
     # use the default output directory
-    out_file = Path(directives.get(
-        Directives.OUT_FILE,
-        OUTPUT_DIR / template_path.name
+    out_dir = Path(directives.get(
+        Directives.OUT_DIR,
+        OUTPUT_DIR
     )).expanduser()
+
+    # Concats the filename to the output directory
+    out_file = out_dir / template_path.name
 
 
     store_template(
