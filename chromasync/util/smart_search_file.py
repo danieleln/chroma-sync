@@ -1,5 +1,6 @@
 from pathlib import Path
 import argparse
+import sys
 
 from ..config.environment import PALETTES_DIR, TEMPLATES_DIR
 
@@ -46,7 +47,10 @@ def smart_search_palette_file(palette: str) -> Path:
 
     if file is None:
         # Unable to find the specified palette
-        logger.critical(f"Unable to find palette '{palette}'")
+        logger.critical(
+            f"Unable to find palette '{palette}'. " + \
+            f"Type `chromasync list -p` to see the available palettes."
+        )
         sys.exit(1)
 
     return file
