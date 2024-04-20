@@ -16,29 +16,33 @@ logger = logging.getLogger("chromasync")
 def run(args: argparse.Namespace) -> None:
     logger.debug("Running the list command")
 
-    if args.palette is True:
-        # Palettes contained in the PALETTES_DIR
-        palettes = list_dir_content(PALETTES_DIR, remove_suffix=True)
-
-        print(f"Found the following", end=" ")
-
-        # Filters dark/light palettes only
-        if args.dark is True:
-            palettes = filter_palettes(palettes, DARK_VARIANT)
-            print("dark", end=" ")
-        elif args.light is True:
-            palettes = filter_palettes(palettes, LIGHT_VARIANT)
-            print("light", end=" ")
-
-        print(f"palettes in '{PALETTES_DIR}'")
-        print("\t" + "\n\t".join(palettes))
-
-
-    else:
+    # Prints available templates
+    if args.template is True:
         print(f"Found the following templates in '{TEMPLATES_DIR}'")
         # Templates contained in TEMPLATES_DIR
         templates = list_dir_content(TEMPLATES_DIR)
         print("\t" + "\n\t".join(templates))
+        return None
+
+
+    # Prints available palettes
+
+    # Palettes contained in the PALETTES_DIR
+    palettes = list_dir_content(PALETTES_DIR, remove_suffix=True)
+
+    print(f"Found the following", end=" ")
+
+    # Filters dark/light palettes only
+    if args.dark is True:
+        palettes = filter_palettes(palettes, DARK_VARIANT)
+        print("dark", end=" ")
+    elif args.light is True:
+        palettes = filter_palettes(palettes, LIGHT_VARIANT)
+        print("light", end=" ")
+
+    print(f"palettes in '{PALETTES_DIR}'")
+    print("\t" + "\n\t".join(palettes))
+
 
 
 

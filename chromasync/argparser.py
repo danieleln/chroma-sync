@@ -93,17 +93,10 @@ def add_reload_command(subparser):
 def add_list_command(subparser):
     parser = subparser.add_parser("list", help="lists available palettes/templates")
 
-    group = parser.add_mutually_exclusive_group(required=True)
-
-    group.add_argument(
-        "-p", "--palette",
-        action="store_true",
-        help=f"shows available palettes"
-    )
-
-    group.add_argument(
+    parser.add_argument(
         "-t", "--template",
-        action="store_false",
+        required=False,
+        action="store_true",
         help=f"shows available templates"
     )
 
