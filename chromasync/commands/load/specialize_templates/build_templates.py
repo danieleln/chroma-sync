@@ -2,7 +2,7 @@ from ....config.environment import TEMPLATES_DIR, OUTPUT_DIR
 from ....config.directives import ColorFmtSpecs
 from ....util import smart_search_template_file
 
-from ..color import Palette, HexColor
+from ..color import Colorscheme, HexColor
 
 from .parse_directive import parse_directives, Directives
 from .replace_colors import replace_colors
@@ -17,7 +17,7 @@ import sys
 logger = logging.getLogger("chromasync")
 
 
-def build_templates(palette: Palette, args: Namespace) -> None:
+def build_templates(colorscheme: Colorscheme, args: Namespace) -> None:
     logger.debug(f"Specializing templates")
 
     # The `reload` command can have templates passed as arguments
@@ -29,7 +29,7 @@ def build_templates(palette: Palette, args: Namespace) -> None:
             # Builds the templates
             if file is not None:
                 build_template(
-                    template_path=file, palette=palette, args=args)
+                    template_path=file, colorscheme=colorscheme, args=args)
 
         return
 
@@ -42,12 +42,12 @@ def build_templates(palette: Palette, args: Namespace) -> None:
         #       templates nested within TEMPLATES_DIR
         if template_path.is_file():
             build_template(
-                template_path=template_path, palette=palette, args=args)
+                template_path=template_path, colorscheme=colorscheme, args=args)
 
 
 
 
-def build_template(template_path: str, palette: Palette, args: Namespace) -> None:
+def build_template(template_path: str, colorscheme: Colorscheme, args: Namespace) -> None:
     logger.debug(f"Specializing template '{template_path}'")
 
     # Reads the content of the template file
@@ -65,7 +65,7 @@ def build_template(template_path: str, palette: Palette, args: Namespace) -> Non
 
     # Replaces colors in the template
     specialized_template = replace_colors(
-        template=template, palette=palette, directives=directives)
+        template=template, colorscheme=colorscheme, directives=directives)
 
     # Looks for the OUT_DIR directive. If it doesn't find it, just
     # use the default output directory

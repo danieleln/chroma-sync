@@ -21,7 +21,7 @@ _DEFAULT_CACHE_DIR = os.path.join(_XDG_CACHE_DIR, _CHROMASYNC_DIR_NAME)
 # Configuration dirs/files
 CONF_DIR = Path(os.getenv(_CHROMASYNC_CONF_DIR_ENV_VAR, _DEFAULT_CONF_DIR))
 TEMPLATES_DIR = CONF_DIR / "templates"
-PALETTES_DIR  = CONF_DIR / "palettes"
+COLORSCHEMES_DIR  = CONF_DIR / "colorschemes"
 POST_SCRIPT_FILE = CONF_DIR / "chromasync-post.sh"
 # CONF_FILE     = CONF_DIR / "chromasync.conf"
 
@@ -30,7 +30,7 @@ POST_SCRIPT_FILE = CONF_DIR / "chromasync-post.sh"
 CACHE_DIR  = Path(os.getenv(_CHROMASYNC_CACHE_DIR_ENV_VAR, _DEFAULT_CACHE_DIR))
 OUTPUT_DIR = CACHE_DIR / "out"
 LOG_FILE   = CACHE_DIR / "chromasync.log"
-CACHED_PALETTE_FILE = CACHE_DIR / "palette.conf"
+CACHED_COLORSCHEME_FILE = CACHE_DIR / "colorscheme.conf"
 
 
 # Builds all the required files and directories
@@ -38,7 +38,7 @@ def build_environment():
     # Builds config dirs/files
     CONF_DIR.mkdir(parents=True, exist_ok=True)
     TEMPLATES_DIR.mkdir(parents=True, exist_ok=True)
-    PALETTES_DIR.mkdir(parents=True, exist_ok=True)
+    COLORSCHEMES_DIR.mkdir(parents=True, exist_ok=True)
 
     if not POST_SCRIPT_FILE.exists():
         POST_SCRIPT_FILE.touch()

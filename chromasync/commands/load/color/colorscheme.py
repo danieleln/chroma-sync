@@ -5,7 +5,7 @@ import logging
 import sys
 
 from ....config.confspecs import DARK_VARIANT, LIGHT_VARIANT, METADATA_HEADER
-from ....config.environment import PALETTES_DIR, CACHED_PALETTE_FILE
+from ....config.environment import COLORSCHEMES_DIR, CACHED_COLORSCHEME_FILE
 from ....config.colors import BaseColors, get_os_colors
 
 from .hexcolor import HexColor
@@ -18,22 +18,22 @@ logger = logging.getLogger("chromasync")
 
 
 
-class Palette:
-    def __init__(self, palette: dict) -> "Palette":
-        # Actual palette
-        self._palette = palette
+class Colorscheme:
+    def __init__(self, colorscheme: dict) -> "Colorscheme":
+        # Actual colorscheme
+        self._colorscheme = colorscheme
 
 
     # Retrieves the HexColor from its name
     def get(self, color_name: str) -> HexColor:
         logger.debug(f"Retrieving color '{color_name}'")
 
-        if color_name in self._palette.keys():
-            return self._palette[color_name]
+        if color_name in self._colorscheme.keys():
+            return self._colorscheme[color_name]
 
         logger.critical(
             f"Invalid color '{color_name}'. " + \
-            f"Valid colors are {self._palette.keys()}"
+            f"Valid colors are {self._colorscheme.keys()}"
         )
         sys.exit(1)
 
@@ -44,8 +44,8 @@ class Palette:
         logger.debug(f"Retrieving color '{composite_color_name}'")
 
         # Uses cached values when possible
-        if composite_color_name in self._palette.keys():
-            return self._palette[composite_color_name]
+        if composite_color_name in self._colorscheme.keys():
+            return self._colorscheme[composite_color_name]
 
         # Creates the composite color
         color1 = self.get(color_name1)
@@ -54,27 +54,27 @@ class Palette:
         composite_color = color1.blend(color2, percentage/100)
 
         # Caches the composite color
-        self._palette[composite_color_name] = composite_color
+        self._colorscheme[composite_color_name] = composite_color
 
         return composite_color
 
 
-    # Creates a new palette from a file
+    # Creates a new colorscheme from a file
     @classmethod
-    def from_conf_file(cls, file: Path, args: argparse.Namespace) -> "Palette":
-        logger.info(f"Parsing palette from file '{file}'")
+    def from_conf_file(cls, file: Path, args: argparse.Namespace) -> "Colorscheme":
+        logger.info(f"Parsing colorscheme from file '{file}'")
 
-        # loads the palette file
-        config = load_palette_conf_file(file=file, args=args)
+        # loads the colorscheme file
+        config = load_colorscheme_conf_file(file=file, args=args)
 
         # Selects which of the light/dark variant to load
         variant = select_variant(config=config, args=args, file=file)
 
-        # Stores a copy of the palette file
-        write_palette_conf_file(config=config, variant=variant, path=CACHED_PALETTE_FILE)
+        # Stores a copy of the colorscheme file
+        write_colorscheme_conf_file(config=config, variant=variant, path=CACHED_COLORSCHEME_FILE)
 
         # Retreives color informations
-        palette = { }
+        colorscheme = { }
         color_hex_string = None
 
         for color in BaseColors:
@@ -89,25 +89,25 @@ class Palette:
                 sys.exit(1)
 
 
-            # Adds the color to the palette dict
-            palette[color] = HexColor(name=color, hex_string=color_hex_string)
+            # Adds the color to the colorscheme dict
+            colorscheme[color] = HexColor(name=color, hex_string=color_hex_string)
 
 
         # Sets OS colors
-        os_colors = get_os_colors(palette)
-        palette = palette | os_colors
+        os_colors = get_os_colors(colorscheme)
+        colorscheme = colorscheme | os_colors
 
-        logger.debug(f"Parsed palette: {palette}")
-
-
-        # Wraps the palette
-        return cls(palette=palette)
+        logger.debug(f"Parsed colorscheme: {colorscheme}")
 
 
+        # Wraps the colorscheme
+        return cls(colorscheme=colorscheme)
 
 
 
-def load_palette_conf_file(file: Path, args: argparse.Namespace) -> configparser.ConfigParser:
+
+
+def load_colorscheme_conf_file(file: Path, args: argparse.Namespace) -> configparser.ConfigParser:
     logger.debug(f"Parsing '{file}'")
 
     config = configparser.ConfigParser()
@@ -124,15 +124,15 @@ def load_palette_conf_file(file: Path, args: argparse.Namespace) -> configparser
         sys.exit(1)
 
     except Exception as e:
-        logger.critical(f"An error occurred while parsing palette '{file}': {e}")
+        logger.critical(f"An error occurred while parsing colorscheme '{file}': {e}")
         sys.exit(1)
 
 
     return config
 
 
-def write_palette_conf_file(config: configparser.ConfigParser, variant: str, path: Path) -> None:
-    logger.debug("Caching palette file")
+def write_colorscheme_conf_file(config: configparser.ConfigParser, variant: str, path: Path) -> None:
+    logger.debug("Caching colorscheme file")
 
     # Adds the variant specification
     if not config.has_section(METADATA_HEADER):
@@ -159,7 +159,7 @@ def select_variant(config: configparser.ConfigParser, args: argparse.Namespace, 
     # Requested dark theme
     if args.dark is True:
         if not has_dark:
-            logger.critical(f"Palette '{file}' has no variant `[{DARK_VARIANT}]`")
+            logger.critical(f"Colorscheme '{file}' has no variant `[{DARK_VARIANT}]`")
             sys.exit(1)
 
         logger.debug("Selected dark variant from --dark option")
@@ -169,7 +169,7 @@ def select_variant(config: configparser.ConfigParser, args: argparse.Namespace, 
     # Requested light theme
     if args.light is True:
         if not has_light:
-            logger.critical(f"Palette '{file}' has no variant `[{LIGHT_VARIANT}]`")
+            logger.critical(f"Colorscheme '{file}' has no variant `[{LIGHT_VARIANT}]`")
             sys.exit(1)
 
         logger.debug("Selected light variant from --light option")
@@ -187,7 +187,7 @@ def select_variant(config: configparser.ConfigParser, args: argparse.Namespace, 
             return variant
 
         logger.critical(
-            f"Invalid variant specification `{variant}` in palette file '{file}'. " + \
+            f"Invalid variant specification `{variant}` in colorscheme file '{file}'. " + \
             f"Valid values are `{DARK_VARIANT}`, " + \
             f"`{LIGHT_VARIANT}`"
         )
@@ -196,10 +196,10 @@ def select_variant(config: configparser.ConfigParser, args: argparse.Namespace, 
 
     # Looks for available variants
     if has_dark and has_light:
-        # Palette has both variants and no variant was specified
+        # Colorscheme has both variants and no variant was specified
         # in the arguments => can't decide which one to load
         logger.critical(
-            f"Palette '{file}' has both a light and a dark variant. " + \
+            f"Colorscheme '{file}' has both a light and a dark variant. " + \
             f"Specify which one to load by adding either of the " + \
             f"options `--dark`, `--light`"
         )
@@ -214,7 +214,7 @@ def select_variant(config: configparser.ConfigParser, args: argparse.Namespace, 
         return LIGHT_VARIANT
 
 
-    # Palette has no variant specification
+    # Colorscheme has no variant specification
     logger.critical(
         f"Missing section variant in '{file}'." + \
         f"Expected at least one of `[{DARK_VARIANT}]`, " + \

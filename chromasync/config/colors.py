@@ -52,7 +52,7 @@ _OS_COLORS = {
 
 
 
-def get_os_colors(palette: dict):
+def get_os_colors(colorscheme: dict):
     distro_name = get_linux_distro()
 
     if distro_name in _OS_COLORS:
@@ -61,18 +61,18 @@ def get_os_colors(palette: dict):
         color2 = color2.value
 
         return {
-            OSColors.OS1.value : palette[color1],
-            OSColors.OS2.value : palette[color2],
+            OSColors.OS1.value : colorscheme[color1],
+            OSColors.OS2.value : colorscheme[color2],
 
-            OSColors.OS1H.value : palette[color1 + "H"],
-            OSColors.OS2H.value : palette[color2 + "H"],
+            OSColors.OS1H.value : colorscheme[color1 + "H"],
+            OSColors.OS2H.value : colorscheme[color2 + "H"],
         }
 
 
     logger.error(f"No OS colors definition for distro '{distro_name}'")
 
     # Fallback: just returns the foreground
-    fg_color = palette["FG"]
+    fg_color = colorscheme["FG"]
     return {
         OSColors.OS1.value : fg_color,
         OSColors.OS2.value : fg_color,

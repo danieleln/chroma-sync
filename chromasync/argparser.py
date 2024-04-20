@@ -1,4 +1,4 @@
-from .config.environment import PALETTES_DIR
+from .config.environment import COLORSCHEMES_DIR
 import argparse
 
 
@@ -34,9 +34,9 @@ def add_load_command(subparser):
     parser = subparser.add_parser("load", help="loads a new theme")
 
     parser.add_argument(
-        "palette",
-        help=f"loads a palette either from the filesystem (by specifying " + \
-             f"a path) or from '{PALETTES_DIR}'. In the latter case, " + \
+        "colorscheme",
+        help=f"loads a colorscheme either from the filesystem (by specifying " + \
+             f"a path) or from '{COLORSCHEMES_DIR}'. In the latter case, " + \
              f"file extension might be omitted"
     )
 
@@ -64,8 +64,8 @@ def add_reload_command(subparser):
     add_light_dark_group(
         parser=parser,
         required=False,
-        light_help="reloads the light variant of the current palette",
-        dark_help="reloads the dark variant of the current palette",
+        light_help="reloads the light variant of the current colorscheme",
+        dark_help="reloads the dark variant of the current colorscheme",
     )
 
     parser.add_argument(
@@ -91,7 +91,7 @@ def add_reload_command(subparser):
 
 # List sub command options
 def add_list_command(subparser):
-    parser = subparser.add_parser("list", help="lists available palettes/templates")
+    parser = subparser.add_parser("list", help="lists available colorschemes/templates")
 
     parser.add_argument(
         "-t", "--template",
@@ -103,8 +103,8 @@ def add_list_command(subparser):
     add_light_dark_group(
         parser=parser,
         required=False,
-        light_help="lists light palettes only",
-        dark_help="lists dark palettes only",
+        light_help="lists light colorschemes only",
+        dark_help="lists dark colorschemes only",
     )
 
 

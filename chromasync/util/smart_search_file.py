@@ -2,7 +2,7 @@ from pathlib import Path
 import argparse
 import sys
 
-from ..config.environment import PALETTES_DIR, TEMPLATES_DIR
+from ..config.environment import COLORSCHEMES_DIR, TEMPLATES_DIR
 
 import logging
 
@@ -38,18 +38,18 @@ def smart_search_file(file: Path, dir: Path=None, ext: str=None) -> Path:
 
 
 
-def smart_search_palette_file(palette: str) -> Path:
+def smart_search_colorscheme_file(colorscheme: str) -> Path:
     file = smart_search_file(
-        file=Path(palette),
-        dir=PALETTES_DIR,
+        file=Path(colorscheme),
+        dir=COLORSCHEMES_DIR,
         ext=".conf"
     )
 
     if file is None:
-        # Unable to find the specified palette
+        # Unable to find the specified colorscheme
         logger.critical(
-            f"Unable to find palette '{palette}'. " + \
-            f"Type `chromasync list -p` to see the available palettes."
+            f"Unable to find colorscheme '{colorscheme}'. " + \
+            f"Type `chromasync list -p` to see the available colorschemes."
         )
         sys.exit(1)
 

@@ -1,4 +1,4 @@
-from .smart_search_file import smart_search_file, smart_search_palette_file, smart_search_template_file
+from .smart_search_file import smart_search_file, smart_search_colorscheme_file, smart_search_template_file
 from . import logging_config
 
 from pathlib import Path

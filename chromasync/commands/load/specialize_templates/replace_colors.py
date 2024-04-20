@@ -1,4 +1,4 @@
-from ..color import Palette, HexColor
+from ..color import Colorscheme, HexColor
 from ....config.directives import ColorFmtSpecs
 
 from .parse_directive import Directives
@@ -13,7 +13,7 @@ logger = logging.getLogger("chromasync")
 # Matches expressions of the form {RED}, {RED:60:YLW}
 COLOR_REGEX = r"\{(\w+)(?::(\d+):(\w+))?\}"
 
-def replace_colors(template: str, palette: Palette, directives: dict) -> str:
+def replace_colors(template: str, colorscheme: Colorscheme, directives: dict) -> str:
     logger.debug(f"Replacing color definitions")
 
     # Required color format (hex with/without leading #)
@@ -30,10 +30,10 @@ def replace_colors(template: str, palette: Palette, directives: dict) -> str:
         if color2 is not None:
             # Returns the composite color
             percentage = int(match.group(2))
-            return palette.get_composite(color1, percentage, color2)
+            return colorscheme.get_composite(color1, percentage, color2)
 
         # Returns just the first color
-        return palette.get(color1)
+        return colorscheme.get(color1)
 
 
 

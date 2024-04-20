@@ -1,7 +1,7 @@
-from ..load.color.palette import DARK_VARIANT, LIGHT_VARIANT
-from ..load.color.palette import Palette
+from ..load.color.colorscheme import DARK_VARIANT, LIGHT_VARIANT
+from ..load.color.colorscheme import Colorscheme
 
-from ...config.environment import TEMPLATES_DIR, PALETTES_DIR
+from ...config.environment import TEMPLATES_DIR, COLORSCHEMES_DIR
 
 from ...util import list_dir_content
 
@@ -25,32 +25,32 @@ def run(args: argparse.Namespace) -> None:
         return None
 
 
-    # Prints available palettes
+    # Prints available colorschemes
 
-    # Palettes contained in the PALETTES_DIR
-    palettes = list_dir_content(PALETTES_DIR, remove_suffix=True)
+    # Colorschemes contained in the COLORSCHEMES_DIR
+    colorschemes = list_dir_content(COLORSCHEMES_DIR, remove_suffix=True)
 
     print(f"Found the following", end=" ")
 
-    # Filters dark/light palettes only
+    # Filters dark/light colorschemes only
     if args.dark is True:
-        palettes = filter_palettes(palettes, DARK_VARIANT)
+        colorschemes = filter_colorschemes(colorschemes, DARK_VARIANT)
         print("dark", end=" ")
     elif args.light is True:
-        palettes = filter_palettes(palettes, LIGHT_VARIANT)
+        colorschemes = filter_colorschemes(colorschemes, LIGHT_VARIANT)
         print("light", end=" ")
 
-    print(f"palettes in '{PALETTES_DIR}'")
-    print("\t" + "\n\t".join(palettes))
+    print(f"colorschemes in '{COLORSCHEMES_DIR}'")
+    print("\t" + "\n\t".join(colorschemes))
 
 
 
 
-# Selects palettes that have the specified (light/dark) header
-def filter_palettes(palettes: list, header: str) -> list:
+# Selects colorschemes that have the specified (light/dark) header
+def filter_colorschemes(colorschemes: list, header: str) -> list:
 
-    def palette_has_section(palette: Palette) -> bool:
-        path = (PALETTES_DIR / palette).with_suffix(".conf")
+    def colorscheme_has_section(colorscheme: Colorscheme) -> bool:
+        path = (COLORSCHEMES_DIR / colorscheme).with_suffix(".conf")
 
         config = configparser.ConfigParser()
         try:
@@ -73,4 +73,4 @@ def filter_palettes(palettes: list, header: str) -> list:
         #     return False
 
 
-    return filter(palette_has_section, palettes)
+    return filter(colorscheme_has_section, colorschemes)
